@@ -1,0 +1,10 @@
+#!/usr/bin/env python3
+
+from rc import *
+from rc import APIClient
+
+
+if __name__ == "__main__":
+  client = APIClient(1, "AA", "http://localhost:8000/api")
+  import json
+  print(json.dumps(client.users, separators=(': ', ', '), indent=4))
