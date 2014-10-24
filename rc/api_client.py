@@ -4,6 +4,9 @@ import json
 import os
 
 class APIClient(object):
+  """
+  Client that can be used to make calls in Python to Roboclub API.
+  """
 
   def __init__(self, public_key=None, private_key=None, base_url=None):
     """
@@ -33,33 +36,81 @@ class APIClient(object):
     self._base_url = base_url
 
   def users(self, **kwargs):
+    """
+    Returns the list of users that
+    match the specified search criteria.
+    """
+
     return self._api_query_get_request("users", **kwargs)
 
   def projects(self, **kwargs):
+    """
+    Returns the list of projects that
+    match the specified search criteria.
+    """
+
     return self._api_query_get_request("projects", **kwargs)
 
   def officers(self, **kwargs):
+    """
+    Returns the list of officers that
+    match the specified search criteria.
+    """
+
     return self._api_query_get_request("officers", **kwargs)
 
   def webcams(self, **kwargs):
+    """
+    Returns the list of webcams that
+    match the specified search criteria.
+    """
+
     return self._api_query_get_request("webcams", **kwargs)
 
   def social_medias(self, **kwargs):
+    """
+    Returns the list of social medias that
+    match the specified search criteria.
+    """
+
     return self._api_query_get_request("social_medias", **kwargs)
 
   def channels(self, **kwargs):
+    """
+    Returns the list of channels that
+    match the specified search criteria.
+    """
+
     return self._api_query_get_request("channels", **kwargs)
 
   def calendar(self):
+    """
+    Returns the list of events that are currently occuring
+    in the club.  Each event has a 'name', 'location', 'start', and 'end'
+    field.
+    """
+
     return self._api_get_request("calendar")
 
   def login(self, username, password):
-    return self._post_request("login", {
+    """
+    Returns True the provided authentication credentials
+    are valid, False otherwise.
+    """
+
+    response = self._post_request("login", {
       'username': username,
       'password': password
     })
+    return bool(response)
 
   def datetime(self):
+    """
+    Returns the current datetime object.
+    NOTE: useful for systems without RTC
+    or no WIFI/Ethernet connection.
+    """
+
     # TODO: convert to datetime
     return self._api_get_request("datetime")
 
