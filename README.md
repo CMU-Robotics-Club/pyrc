@@ -1,4 +1,4 @@
 pyroboclub
 ==========
 
-Python bindings for Robotics Club API (RCCentrum) 
+Python bindings for Robotics Club API(roboticsclub.org)

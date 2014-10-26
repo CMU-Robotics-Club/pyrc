@@ -2,6 +2,7 @@ import logging
 import requests
 import json
 import os
+import dateutil.parser
 
 class APIClient(object):
   """
@@ -153,8 +154,8 @@ class APIClient(object):
     or no WIFI/Ethernet connection.
     """
 
-    # TODO: convert to datetime
-    return self._api_get_request("datetime")
+    response = self._api_get_request("datetime")
+    return dateutil.parser.parse(response)
 
   def magnetic(self, _id):
     """
