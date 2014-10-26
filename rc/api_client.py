@@ -32,6 +32,7 @@ class APIClient(object):
     self._session.headers.update({
       "PUBLIC_KEY": public_key,
       "PRIVATE_KEY": private_key,
+      "API_CLIENT": "pyrc v1.0",
     })
 
     self._logger.debug("session created")
