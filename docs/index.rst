@@ -8,6 +8,8 @@ Welcome to pyrc's documentation!
 
 pyrc is a library of Python Bindings around the RoboticsClub API.
 
+To obtain project authentication keys please visit the `Projects Admin Page <http://roboticsclub.org/crm/admin/projects/project/>`_
+
 .. toctree::
    :maxdepth: 2
 
