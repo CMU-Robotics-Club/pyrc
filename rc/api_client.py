@@ -34,6 +34,8 @@ class APIClient(object):
       "PRIVATE_KEY": private_key,
     })
 
+    self._logger.debug("session created")
+
     self._base_url = base_url
 
   def users(self, **kwargs):
@@ -41,7 +43,7 @@ class APIClient(object):
     Returns the list of users that
     match the specified search criteria.
     """
-
+    
     return self._api_query_get_request("users", **kwargs)
 
   def user(self, id, **kwargs):
@@ -194,11 +196,14 @@ class APIClient(object):
   # Private Methods
 
   def _get(self, url):
+    self._logger.debug("GET to {}".format(url))
+
     response = self._session.get(url)
     
     if response.status_code != requests.codes.ok:
       raise requests.exceptions.HTTPError(response.text)
 
+    self._logger.debug("GET response {}".format(response.text))
     return response
 
   def _get_request(self, path):
@@ -208,6 +213,8 @@ class APIClient(object):
     return self._get_request("api/{}".format(path)).json()
 
   def _api_query_get_request(self, path, **kwargs):
+    self._logger.debug("GET to {} with query parameters {}".format(path, kwargs))
+
     url = path
 
     for i,(key, value) in enumerate(kwargs.items()):
@@ -217,6 +224,8 @@ class APIClient(object):
     return self._api_get_request(url)
 
   def _post_request(self, path, message):
+    self._logger.debug("POST to {}".format(path))
+
     url = "{}/api/{}/".format(self._base_url, path)
     headers = {'Content-type': 'application/json', 'Accept': 'application/json'}
 

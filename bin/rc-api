@@ -70,8 +70,9 @@ if __name__ == "__main__":
   verbose = args.verbose
   action = args.action
 
+  logger = logging.getLogger()
+
   if verbose:
-    logger = logging.getLogger()
     logger.setLevel(logging.DEBUG)
 
     console_handler = logging.StreamHandler(sys.stdout)
@@ -81,6 +82,8 @@ if __name__ == "__main__":
     logger.addHandler(console_handler)
 
   client = APIClient(public_key, private_key, host)
+  
+  logger.debug("API client created")
 
   data = None
 
@@ -100,6 +103,8 @@ if __name__ == "__main__":
     _id = args.id
     magnetic = client.magnetic(_id)
   else:
+    logger.info("action {} might have parameters".format(action))
+
     params = args.params
     query_params = {}
 
@@ -118,5 +123,7 @@ if __name__ == "__main__":
       data = client.social_medias(**query_params)
     elif action == 'channels':
       data = client.channels(**query_params)
+
+  logger.debug("resulting data is {}".format(data))
 
   print_object(data)
