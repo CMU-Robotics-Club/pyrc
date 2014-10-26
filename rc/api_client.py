@@ -43,6 +43,13 @@ class APIClient(object):
 
     return self._api_query_get_request("users", **kwargs)
 
+  def user(self, id, **kwargs):
+    """
+    Returns the user with the specified id.
+    """
+
+    return self._api_query_get_request("users/{}".format(id), **kwargs)
+
   def projects(self, **kwargs):
     """
     Returns the list of projects that
@@ -50,6 +57,13 @@ class APIClient(object):
     """
 
     return self._api_query_get_request("projects", **kwargs)
+
+  def project(self, id, **kwargs):
+    """
+    Returns the project with the specified id.
+    """
+
+    return self._api_query_get_request("projects/{}".format(id), **kwargs)
 
   def officers(self, **kwargs):
     """
@@ -59,6 +73,13 @@ class APIClient(object):
 
     return self._api_query_get_request("officers", **kwargs)
 
+  def officer(self, id, **kwargs):
+    """
+    Returns the officer with the specified id.
+    """
+
+    return self._api_query_get_request("officers/{}".format(id), **kwargs)
+
   def webcams(self, **kwargs):
     """
     Returns the list of webcams that
@@ -66,6 +87,13 @@ class APIClient(object):
     """
 
     return self._api_query_get_request("webcams", **kwargs)
+
+  def webcam(self, id, **kwargs):
+    """
+    Returns the webcam with the specified id.
+    """
+
+    return self._api_query_get_request("webcams/{}".format(id), **kwargs)
 
   def social_medias(self, **kwargs):
     """
@@ -75,6 +103,13 @@ class APIClient(object):
 
     return self._api_query_get_request("social_medias", **kwargs)
 
+  def social_media(self, id, **kwargs):
+    """
+    Returns the social media with the specified id.
+    """
+
+    return self._api_query_get_request("social_medias/{}".format(id), **kwargs)
+
   def channels(self, **kwargs):
     """
     Returns the list of channels that
@@ -82,6 +117,13 @@ class APIClient(object):
     """
 
     return self._api_query_get_request("channels", **kwargs)
+
+  def channel(self, id, **kwargs):
+    """
+    Returns the channel with the specified id.
+    """
+
+    return self._api_query_get_request("channels/{}".format(id), **kwargs)
 
   def calendar(self):
     """
