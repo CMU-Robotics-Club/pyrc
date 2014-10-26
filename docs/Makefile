@@ -24,6 +24,8 @@ I18NSPHINXOPTS  = $(PAPEROPT_$(PAPER)) $(SPHINXOPTS) .
 help:
 	@echo "Please use \`make <target>' where <target> is one of"
 	@echo "  html       to make standalone HTML files"
+	@echo "  apidoc     generate rst files for code documentation"
+	@echo "  push       pushes files to roboticsclub.org/pyrc/"
 	@echo "  dirhtml    to make HTML files named index.html in directories"
 	@echo "  singlehtml to make a single large HTML file"
 	@echo "  pickle     to make pickle files"
@@ -48,6 +50,12 @@ help:
 
 clean:
 	rm -rf $(BUILDDIR)/*
+
+apidoc:
+	sphinx-apidoc -o ./ ../rc/
+
+push:
+	scp -r $(BUILDDIR)/html/* root@roboticsclub.org:/var/www/test/pyrc/
 
 html:
 	$(SPHINXBUILD) -b html $(ALLSPHINXOPTS) $(BUILDDIR)/html

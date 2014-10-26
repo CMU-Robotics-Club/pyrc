@@ -6,12 +6,18 @@
 Welcome to pyrc's documentation!
 ================================
 
-Contents:
+pyrc is a library of Python Bindings around the RoboticsClub API.
 
 .. toctree::
    :maxdepth: 2
 
+   installation
+   getting_started
+   bin
+   development
 
+   .. automodule:: rc
+    :members:
 
 Indices and tables
 ==================
