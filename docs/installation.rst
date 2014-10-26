@@ -7,13 +7,14 @@ Installation
   it on a different version and it works please file a ticket at `pyrc Issues Page <https://github.com/CMU-Robotics-Club/pyrc/issues>`_
 
 
-Git & Pip
+Git & Setup.py
 =========================
 
 ::
 
   git clone https://github.com/CMU-Robotics-Club/pyrc
-  pip<python version> install pyrc/
+  cd pyrc/
+  ./setup.py install
 
 
 .. note::
@@ -21,7 +22,7 @@ Git & Pip
 
   ::
 
-    pip<python version> develop pyrc/
+    ./setup.py develop
 
   which creates a symbolic link between your local files and the pyrc
   package installed system wide.  This means you do not have to run `install`
