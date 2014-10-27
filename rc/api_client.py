@@ -239,6 +239,10 @@ class APIClient(object):
     response = self._session.post(url, data=data, headers=headers)
     
     if response.status_code != requests.codes.ok:
-      raise requests.exceptions.HTTPError(response.text)
+      response_body = response.json()
+      e = requests.exceptions.HTTPError(response_body)
+      e.errno = response_body['errno']
+      e.detail = response_body['detail']
+      raise e
 
     return response.json()
