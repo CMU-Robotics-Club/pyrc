@@ -23,7 +23,7 @@ if __name__ == "__main__":
           print()
 
         print_object(k)
-    elif type(o).__name__ == 'dict':
+    elif isinstance(o, dict):
       for key, value in o.items():
         print("{} {}".format(key, value))
     else:

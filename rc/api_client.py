@@ -3,6 +3,7 @@ import requests
 import json
 import os
 import dateutil.parser
+import collections
 
 class APIClient(object):
   """
@@ -211,7 +212,7 @@ class APIClient(object):
     return self._get("{}/{}".format(self._base_url, path))
 
   def _api_get_request(self, path):
-    return self._get_request("api/{}".format(path)).json()
+    return self._get_request("api/{}".format(path)).json(object_pairs_hook=collections.OrderedDict)
 
   def _api_query_get_request(self, path, **kwargs):
     self._logger.debug("GET to {} with query parameters {}".format(path, kwargs))
@@ -239,10 +240,10 @@ class APIClient(object):
     response = self._session.post(url, data=data, headers=headers)
     
     if response.status_code != requests.codes.ok:
-      response_body = response.json()
+      response_body = response.json(object_pairs_hook=collections.OrderedDict)
       e = requests.exceptions.HTTPError(response_body)
       e.errno = response_body['errno']
       e.detail = response_body['detail']
       raise e
 
-    return response.json()
+    return response.json(object_pairs_hook=collections.OrderedDict)
