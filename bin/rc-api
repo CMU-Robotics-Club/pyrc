@@ -101,7 +101,7 @@ if __name__ == "__main__":
     data = client.rfid(_id)
   elif action == 'magnetic':
     _id = args.id
-    magnetic = client.magnetic(_id)
+    data = client.magnetic(_id)
   else:
     logger.info("action {} might have parameters".format(action))
 
