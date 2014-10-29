@@ -149,6 +149,7 @@ class APIClient(object):
       'username': username,
       'password': password
     })
+
     return bool(response)
 
   def datetime(self):
@@ -164,16 +165,30 @@ class APIClient(object):
   def magnetic(self, _id):
     """
     Returns the ID of the user with the specified Magnetic ID.
+    If no such user exists returns None.
     """
 
-    return self._post_request("magnetic", _id)
+    try:
+      return self._post_request("magnetic", _id)
+    except requests.exceptions.HTTPError as e:
+      if e.status_code == 400:
+        return None
+      else:
+        raise
 
   def rfid(self, _id):
     """
     Returns the ID of the user with the specified RFID.
+    If no such user exists returns None.
     """
 
-    return self._post_request("rfid", _id)
+    try:
+      return self._post_request("rfid", _id)
+    except requests.exceptions.HTTPError as e:
+      if e.status_code == 400:
+        return None
+      else:
+        raise
 
   # TODO: ability to create and write to channels
 
@@ -201,9 +216,7 @@ class APIClient(object):
     self._logger.debug("GET to {}".format(url))
 
     response = self._session.get(url)
-    
-    if response.status_code != requests.codes.ok:
-      raise requests.exceptions.HTTPError(response.text)
+    self._check_response(response)
 
     self._logger.debug("GET response {}".format(response.text))
     return response
@@ -238,12 +251,23 @@ class APIClient(object):
       data = message
 
     response = self._session.post(url, data=data, headers=headers)
-    
-    if response.status_code != requests.codes.ok:
-      response_body = response.json(object_pairs_hook=collections.OrderedDict)
-      e = requests.exceptions.HTTPError(response_body)
-      e.errno = response_body['errno']
-      e.detail = response_body['detail']
-      raise e
+    self._check_response(response)
 
     return response.json(object_pairs_hook=collections.OrderedDict)
+
+  def _check_response(self, response):
+    # Don't call raise_for_status since the HTTPException fields
+    # status_code, errno, and detail should be set.
+    if response.status_code != requests.codes.ok:      
+      status_code = response.status_code
+      response_body = response.json(object_pairs_hook=collections.OrderedDict)
+      errno = response_body['errno']
+      detail = response_body['detail']
+
+      e = requests.exceptions.HTTPError("{} {}({})".format(status_code, errno, detail))
+      
+      e.status_code = status_code
+      e.errno = response_body
+      e.detail = response_body['detail']
+
+      raise e
