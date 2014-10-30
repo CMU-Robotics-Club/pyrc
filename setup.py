@@ -14,7 +14,7 @@ setup(
     description = ("CMU Robotics Club API"),
     license = "MIT",
     keywords = "roboclub robotics club api cmu",
-    packages=['rc/', 'tests'],
+    packages=['rc/',],
     scripts = ["bin/rc-api"],
     long_description=read('README.md'),
     install_dependencies = ['requests', 'python-dateutil']
