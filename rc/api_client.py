@@ -273,8 +273,6 @@ class APIClient(object):
     return response.json(object_pairs_hook=collections.OrderedDict)
 
   def _check_response(self, response):
-    print(response.text)
-
     # Don't call raise_for_status since the HTTPException fields
     # status_code, errno, and detail should be set.
     if response.status_code != requests.codes.ok:      
