@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 from rc import APIClient
-import requests
 import sys
 
 if __name__ == '__main__':

@@ -15,7 +15,7 @@ if __name__ == '__main__':
   try:
     user_id = client.rfid(rfid)
   except requests.exceptions.HTTPError as e:
-    print("{}({})".format(e.detail, e.errno))
+    print("HTTP {}: {}({})".format(e.status_code, e.detail, e.errno))
     sys.exit(1)
 
   user = client.user(user_id)

@@ -190,6 +190,9 @@ class APIClient(object):
       else:
         raise
 
+  def create_channel(self, name):
+    return self._post_request("channels", {'name': name})
+
   # TODO: ability to create and write to channels
 
   def get(self, url):
@@ -208,6 +211,20 @@ class APIClient(object):
     """
 
     return self._post_request("users/{}/rfid".format(user_id), rfid)
+
+  def send_email(self, user_id, subject, body):
+    """
+    Sends an email to the specified user.
+    This is a priveleged option and you likely
+    do not have permission.
+    """
+
+    self._logger.debug("Sending email to {} - {} | {}".format(user_id, subject, body))
+
+    return self._post_request("users/{}/email".format(user_id), {
+      'subject': subject,
+      'body': body,
+    })
 
 
   # Private Methods
@@ -256,6 +273,8 @@ class APIClient(object):
     return response.json(object_pairs_hook=collections.OrderedDict)
 
   def _check_response(self, response):
+    print(response.text)
+
     # Don't call raise_for_status since the HTTPException fields
     # status_code, errno, and detail should be set.
     if response.status_code != requests.codes.ok:      
@@ -267,7 +286,7 @@ class APIClient(object):
       e = requests.exceptions.HTTPError("{} {}({})".format(status_code, errno, detail))
       
       e.status_code = status_code
-      e.errno = response_body
-      e.detail = response_body['detail']
+      e.errno = errno
+      e.detail = detail
 
       raise e
