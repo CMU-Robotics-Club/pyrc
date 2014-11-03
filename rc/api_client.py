@@ -27,7 +27,7 @@ class APIClient(object):
       private_key = os.environ.get('RC_PRIVATE_KEY')
 
     if not base_url:
-      base_url = "http://roboticsclub.org/crm"
+      base_url = "http://roboticsclub.org"
 
     self._session = requests.Session()
     self._session.headers.update({
