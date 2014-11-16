@@ -160,6 +160,21 @@ class APIClient(object):
 
     return self._api_query_get_request("tshirts/{}".format(id), **kwargs)
 
+  def posters(self, **kwargs):
+    """
+    Returns the list of posters that
+    match the specified search criteria.
+    """
+
+    return self._api_query_get_request("posters", **kwargs)
+
+  def poster(self, id, **kwargs):
+    """
+    Returns the poster with the specified id.
+    """
+
+    return self._api_query_get_request("posters/{}".format(id), **kwargs)
+
   def channels(self, **kwargs):
     """
     Returns the list of channels that

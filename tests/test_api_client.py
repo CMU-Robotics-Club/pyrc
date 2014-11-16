@@ -44,6 +44,10 @@ class APIClientTestCase(unittest.TestCase):
     client = APIClient()
     self.assertGreaterEqual(len(client.social_medias()), 1)
 
+  def test_posters(self):
+    client = APIClient()
+    self.assertGreaterEqual(len(client.posters()), 1)
+
   def test_rfid_none(self):
     client = APIClient()
     
