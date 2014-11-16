@@ -47,7 +47,20 @@ if __name__ == "__main__":
   create_model_parser('officers', "Roboclub Officers")
   create_model_parser('webcams', "Roboclub Webcams")
   create_model_parser('social_medias', "Roboclub Social Medias")
-  create_model_parser('channels', "Roboclub Channels for projects to communicate with one another")
+  
+  channels_parser = actions_parser.add_parser('channels', help="Roboclub Channels for projects to communicate with one another")
+  channels_method_parser = channels_parser.add_subparsers(dest='method', help="Channel Method")
+  channels_method_parser.required = True
+  
+  channels_list_parser = channels_method_parser.add_parser('list', help="Lists Channels that meet search criteria")
+  channels_list_parser.add_argument('params', nargs='*', type=query_type, help="Channel list query parameters")
+
+  channels_create_parser = channels_method_parser.add_parser('create', help="Creates a Channel")
+  channels_create_parser.add_argument('name', help="Name of the channel")
+
+  channels_write_parser = channels_method_parser.add_parser('write', help="Writes to a Channel")
+  channels_write_parser.add_argument('id', help="ID of the channel")
+  channels_write_parser.add_argument('value', help="Value to write to channel")
 
   calendar_parser = actions_parser.add_parser('calendar', help="What is currently occuring in the club")
 
@@ -102,6 +115,25 @@ if __name__ == "__main__":
   elif action == 'magnetic':
     _id = args.id
     data = client.magnetic(_id)
+  elif action == 'channels':
+    method = args.method
+
+    if method == 'list':
+      params = args.params
+      query_params = {}
+
+      for (key, value) in params:
+        query_params[key] = value
+
+      data = client.channels(**query_params)
+    elif method == 'create':
+      name = args.name
+      data = client.channel_create(name)
+    elif method == 'write':
+      id = args.id
+      value = args.value
+      data = client.channel_write(id, value)
+
   else:
     logger.info("action {} might have parameters".format(action))
 
@@ -121,8 +153,6 @@ if __name__ == "__main__":
       data = client.webcams(**query_params)
     elif action == 'social_medias':
       data = client.social_medias(**query_params)
-    elif action == 'channels':
-      data = client.channels(**query_params)
 
   logger.debug("resulting data is {}".format(data))
 

@@ -27,7 +27,7 @@ class APIClient(object):
       private_key = os.environ.get('RC_PRIVATE_KEY')
 
     if not base_url:
-      base_url = "http://roboticsclub.org"
+      base_url = "https://roboticsclub.org"
 
     self._session = requests.Session()
     self._session.headers.update({
@@ -115,6 +115,22 @@ class APIClient(object):
 
     return self._api_query_get_request("social_medias/{}".format(id), **kwargs)
 
+  def sponsors(self, **kwargs):
+    """
+    Returns the list of sponsors that
+    match the specified search criteria.
+    """
+
+    return self._api_query_get_request("sponsors", **kwargs)
+
+  def sponsor(self, id, **kwargs):
+    """
+    Returns the sponsor with the specified id.
+    """
+
+    return self._api_query_get_request("sponsors/{}".format(id), **kwargs)
+
+
   def channels(self, **kwargs):
     """
     Returns the list of channels that
@@ -190,10 +206,11 @@ class APIClient(object):
       else:
         raise
 
-  def create_channel(self, name):
+  def channel_create(self, name):
     return self._post_request("channels", {'name': name})
 
-  # TODO: ability to create and write to channels
+  def channel_write(self, id, value):
+    return self._post_request("channels/{}".format(id), {'value': value}, True)
 
   def get(self, url):
     """
@@ -255,7 +272,7 @@ class APIClient(object):
 
     return self._api_get_request(url)
 
-  def _post_request(self, path, message):
+  def _post_request(self, path, message, put=False):
     self._logger.debug("POST to {}".format(path))
 
     url = "{}/api/{}/".format(self._base_url, path)
@@ -267,7 +284,11 @@ class APIClient(object):
     except ValueError:
       data = message
 
-    response = self._session.post(url, data=data, headers=headers)
+    if not put:
+      response = self._session.post(url, data=data, headers=headers)
+    else:
+      response = self._session.put(url, data=data, headers=headers)
+
     self._check_response(response)
 
     return response.json(object_pairs_hook=collections.OrderedDict)
@@ -275,7 +296,9 @@ class APIClient(object):
   def _check_response(self, response):
     # Don't call raise_for_status since the HTTPException fields
     # status_code, errno, and detail should be set.
-    if response.status_code != requests.codes.ok:      
+
+    # 201 for successful creation of channel
+    if response.status_code != requests.codes.ok and response.status_code != 201:      
       status_code = response.status_code
       response_body = response.json(object_pairs_hook=collections.OrderedDict)
       errno = response_body['errno']
