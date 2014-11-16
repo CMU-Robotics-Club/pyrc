@@ -36,6 +36,10 @@ class APIClientTestCase(unittest.TestCase):
     client = APIClient()
     self.assertGreaterEqual(len(client.faqs()), 1)
 
+  def test_tshirts(self):
+    client = APIClient()
+    self.assertGreaterEqual(len(client.tshirts()), 1)
+
   def test_social_medias(self):
     client = APIClient()
     self.assertGreaterEqual(len(client.social_medias()), 1)

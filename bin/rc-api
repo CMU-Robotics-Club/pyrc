@@ -49,7 +49,8 @@ if __name__ == "__main__":
   create_model_parser('social_medias', "Roboclub Social Medias")
   create_model_parser('sponsors', "Roboclub Sponsors")
   create_model_parser('faqs', "Roboclub FAQs")
-  
+  create_model_parser('tshirts', "Roboclub TShirts")
+
   channels_parser = actions_parser.add_parser('channels', help="Roboclub Channels for projects to communicate with one another")
   channels_method_parser = channels_parser.add_subparsers(dest='method', help="Channel Method")
   channels_method_parser.required = True
@@ -159,6 +160,8 @@ if __name__ == "__main__":
       data = client.sponsors(**query_params)
     elif action == 'faqs':
       data = client.faqs(**query_params)
+    elif action == 'tshirts':
+      data = client.tshirts(**query_params)
 
   logger.debug("resulting data is {}".format(data))
 

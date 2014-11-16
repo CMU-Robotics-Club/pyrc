@@ -145,6 +145,21 @@ class APIClient(object):
 
     return self._api_query_get_request("faq/{}".format(id), **kwargs)
 
+  def tshirts(self, **kwargs):
+    """
+    Returns the list of tshirts that
+    match the specified search criteria.
+    """
+
+    return self._api_query_get_request("tshirts", **kwargs)
+
+  def tshirt(self, id, **kwargs):
+    """
+    Returns the tshirt with the specified id.
+    """
+
+    return self._api_query_get_request("tshirts/{}".format(id), **kwargs)
+
   def channels(self, **kwargs):
     """
     Returns the list of channels that
