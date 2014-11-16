@@ -130,6 +130,20 @@ class APIClient(object):
 
     return self._api_query_get_request("sponsors/{}".format(id), **kwargs)
 
+  def faqs(self, **kwargs):
+    """
+    Returns the list of FAQ categories that
+    match the specified search criteria.
+    """
+
+    return self._api_query_get_request("faq", **kwargs)
+
+  def faq(self, id, **kwargs):
+    """
+    Returns the FAQ category with the specified id.
+    """
+
+    return self._api_query_get_request("faq/{}".format(id), **kwargs)
 
   def channels(self, **kwargs):
     """

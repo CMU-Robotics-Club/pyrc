@@ -32,6 +32,10 @@ class APIClientTestCase(unittest.TestCase):
     # Might be 0 channels
     self.assertGreaterEqual(len(client.channels()), 0)
 
+  def test_faqs(self):
+    client = APIClient()
+    self.assertGreaterEqual(len(client.faqs()), 1)
+
   def test_social_medias(self):
     client = APIClient()
     self.assertGreaterEqual(len(client.social_medias()), 1)
