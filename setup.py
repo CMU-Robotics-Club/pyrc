@@ -19,5 +19,5 @@ setup(
     packages=['rc/',],
     scripts = ["bin/rc-api"],
     long_description=read('README.md'),
-    install_dependencies = ['requests', 'python-dateutil']
+    install_requires = ['requests', 'python-dateutil'],
 )
