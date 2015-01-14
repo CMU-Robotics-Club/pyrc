@@ -8,8 +8,8 @@ from rc.clients import APIClient
 
 if __name__ == "__main__":
   parser = argparse.ArgumentParser()
-  parser.add_argument('-public_key', help="Project Public Key(defaults to OS environment variable `RC_PROJECT_PUBLIC_KEY`")
-  parser.add_argument('-private_key', help="Project Private Key(defaults to OS environment variable `RC_PROJECT_PRIVATE_KEY`")
+  parser.add_argument('-public_key', help="Project Public Key(defaults to OS environment variable `RC_PUBLIC_KEY`")
+  parser.add_argument('-private_key', help="Project Private Key(defaults to OS environment variable `RC_PRIVATE_KEY`")
   parser.add_argument('-host', help="API Host(default: 'http://roboticsclub.org/crm')")
   parser.add_argument('-v', '--verbose', help="Print logging info to stdout", action='store_true')
 
