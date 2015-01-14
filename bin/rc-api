@@ -42,16 +42,31 @@ if __name__ == "__main__":
     model_parser.add_argument('params', nargs='*', type=query_type, help="{} query parameters".format(action))
     return model_parser
 
-  create_model_parser('users', "Roboclub Users")
-  create_model_parser('projects', "Roboclub Projects")
+  create_model_parser('faqs', "Roboclub FAQs")
+  create_model_parser('machines', "Roboclub Machines")
   create_model_parser('officers', "Roboclub Officers")
-  create_model_parser('webcams', "Roboclub Webcams")
+  create_model_parser('posters', "Roboclub Posters")
+  create_model_parser('projects', "Roboclub Projects")
   create_model_parser('social_medias', "Roboclub Social Medias")
   create_model_parser('sponsors', "Roboclub Sponsors")
-  create_model_parser('faqs', "Roboclub FAQs")
   create_model_parser('tshirts', "Roboclub TShirts")
-  create_model_parser('posters', "Roboclub Posters")
+  create_model_parser('webcams', "Roboclub Webcams")
 
+  # APIRequests
+  api_requests_parser = actions_parser.add_parser('api_requests', help="Roboclub APIRequests")
+  api_requests_method_parser = api_requests_parser.add_subparsers(dest='method', help="APIRequest Method")
+  api_requests_method_parser.required = True
+  
+  api_requests_list_parser = api_requests_method_parser.add_parser('list', help="Lists APIRequests that meet search criteria")
+  api_requests_list_parser.add_argument('params', nargs='*', type=query_type, help="APIRequest list query parameters")
+
+  api_requests_write_parser = api_requests_method_parser.add_parser('write', help="Writes to a Channel")
+  api_requests_write_parser.add_argument('id', help="ID of the APIRequest")
+  api_requests_write_parser.add_argument('-success', help="Success value to write to APIRequest")
+  api_requests_write_parser.add_argument('-meta', help="Meta value to write to APIRequest")
+
+
+  # Channels
   channels_parser = actions_parser.add_parser('channels', help="Roboclub Channels for projects to communicate with one another")
   channels_method_parser = channels_parser.add_subparsers(dest='method', help="Channel Method")
   channels_method_parser.required = True
@@ -59,25 +74,51 @@ if __name__ == "__main__":
   channels_list_parser = channels_method_parser.add_parser('list', help="Lists Channels that meet search criteria")
   channels_list_parser.add_argument('params', nargs='*', type=query_type, help="Channel list query parameters")
 
-  channels_create_parser = channels_method_parser.add_parser('create', help="Creates a Channel")
-  channels_create_parser.add_argument('name', help="Name of the channel")
-
   channels_write_parser = channels_method_parser.add_parser('write', help="Writes to a Channel")
   channels_write_parser.add_argument('id', help="ID of the channel")
   channels_write_parser.add_argument('value', help="Value to write to channel")
 
+
+  # Users
+  users_parser = actions_parser.add_parser('users', help="Roboclub Users")
+  users_method_parser = users_parser.add_subparsers(dest='method', help="User Method")
+  users_method_parser.required = True
+  
+  users_list_parser = users_method_parser.add_parser('list', help="Lists Users that meet search criteria")
+  users_list_parser.add_argument('params', nargs='*', type=query_type, help="User list query parameters")
+
+  users_balance_parser = users_method_parser.add_parser('balance', help="Change a User's balance by an amount (Priveleged Operation)")
+  users_balance_parser.add_argument('id', help="ID of the User")
+  users_balance_parser.add_argument('amount', help="Amount to change balance")
+  users_balance_parser.add_argument('-meta', help="Meta value")
+
+  users_email_parser = users_method_parser.add_parser('email', help="Send an email to a User (Priveleged Operation)")
+  users_email_parser.add_argument('id', help="ID of the User")
+  users_email_parser.add_argument('subject')
+  users_email_parser.add_argument('content')
+  users_email_parser.add_argument('-meta', help="Meta value")
+
+  users_rfid_parser = users_method_parser.add_parser('rfid', help="Set a User's RFID (Priveleged Operation)")
+  users_rfid_parser.add_argument('id', help="ID of the User")
+  users_rfid_parser.add_argument('rfid')
+  users_rfid_parser.add_argument('-meta', help="Meta value")
+
+  # Calendar
   calendar_parser = actions_parser.add_parser('calendar', help="What is currently occuring in the club")
 
-  login_parser = actions_parser.add_parser('login', help="Determine if credentials valid for a provided username and password")
-  login_parser.add_argument('username', help="Member's Username")
-
+  # Datetime
   datetime_parser = actions_parser.add_parser('datetime', help="Current Datetime")
 
-  rfid_parser = actions_parser.add_parser('rfid', help="RFID based User lookup")
-  rfid_parser.add_argument('id')
-
+  # Magnetic
   magnetic_parser = actions_parser.add_parser('magnetic', help="Magnetic Stripe based User lookup")
   magnetic_parser.add_argument('id')
+  magnetic_parser.add_argument('-meta', help="Meta field")
+
+  # RFID
+  rfid_parser = actions_parser.add_parser('rfid', help="RFID based User lookup")
+  rfid_parser.add_argument('id')
+  rfid_parser.add_argument('-meta', help="Meta field")
+
 
   args = parser.parse_args()
 
@@ -104,21 +145,23 @@ if __name__ == "__main__":
 
   data = None
 
-  if action == 'calendar':
-    data = client.calendar()
-  elif action == 'login':
-    username = args.username
-    password = getpass.getpass()
-    
-    data = client.login(username, password)
-  elif action == 'datetime':
-    data = client.datetime()
-  elif action == 'rfid':
-    _id = args.id
-    data = client.rfid(_id)
-  elif action == 'magnetic':
-    _id = args.id
-    data = client.magnetic(_id)
+  if action == 'api_requests':
+    method = args.method
+
+    if method == 'list':
+      params = args.params
+      query_params = {}
+
+      for (key, value) in params:
+        query_params[key] = value
+
+      data = client.api_requests(**query_params)
+    elif method == 'write':
+      id = args.id
+      success = args.success
+      meta = args.meta
+      data = client.api_request_write(id, **{'meta': meta, 'success': success})
+
   elif action == 'channels':
     method = args.method
 
@@ -130,14 +173,51 @@ if __name__ == "__main__":
         query_params[key] = value
 
       data = client.channels(**query_params)
-    elif method == 'create':
-      name = args.name
-      data = client.channel_create(name)
     elif method == 'write':
       id = args.id
       value = args.value
       data = client.channel_write(id, value)
 
+  elif action == 'users':
+    method = args.method
+
+    if method == 'list':
+      params = args.params
+      query_params = {}
+
+      for (key, value) in params:
+        query_params[key] = value
+
+      data = client.users(**query_params)
+    elif method == 'balance':
+      id = args.id
+      amount = args.value
+      meta = args.meta
+      data = client.user_balance(id, amount, meta)
+    elif method == 'email':
+      id = args.id
+      subject = args.subject
+      content = args.content
+      meta = args.meta
+      data = client.user_email(id, subject, content, meta)
+    elif method == 'rfid':
+      id = args.id
+      rfid = args.rfid
+      meta = args.meta
+      data = client.user_rfid(id, rfid, meta)
+
+  elif action == 'calendar':
+    data = client.calendar()
+  elif action == 'datetime':
+    data = client.datetime()
+  elif action == 'magnetic':
+    _id = args.id
+    meta = args.meta
+    data = client.magnetic(_id, meta)
+  elif action == 'rfid':
+    _id = args.id
+    meta = args.meta
+    data = client.rfid(_id, meta)
   else:
     logger.info("action {} might have parameters".format(action))
 
@@ -147,24 +227,24 @@ if __name__ == "__main__":
     for (key, value) in params:
       query_params[key] = value
 
-    if action == 'users':
-      data = client.users(**query_params)
-    elif action == 'projects':
-      data = client.projects(**query_params)
+    if action == 'faqs':
+      data = client.faqs(**query_params)
+    elif action == 'machines':
+      data = client.machines(**query_params)
     elif action == 'officers':
       data = client.officers(**query_params)
-    elif action == 'webcams':
-      data = client.webcams(**query_params)
+    elif action == 'posters':
+      data = client.posters(**query_params)
+    elif action == 'projects':
+      data = client.projects(**query_params)
     elif action == 'social_medias':
       data = client.social_medias(**query_params)
     elif action == 'sponsors':
       data = client.sponsors(**query_params)
-    elif action == 'faqs':
-      data = client.faqs(**query_params)
     elif action == 'tshirts':
       data = client.tshirts(**query_params)
-    elif action == 'posters':
-      data = client.posters(**query_params)
+    elif action == 'webcams':
+      data = client.webcams(**query_params)
 
   logger.debug("resulting data is {}".format(data))
 

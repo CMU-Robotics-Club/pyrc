@@ -1,4 +1,4 @@
-pyroboclub
+pyrc
 ==========
 
 [![Build Status](https://travis-ci.org/CMU-Robotics-Club/pyrc.svg)](https://travis-ci.org/CMU-Robotics-Club/pyrc)

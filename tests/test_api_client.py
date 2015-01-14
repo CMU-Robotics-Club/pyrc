@@ -29,8 +29,7 @@ class APIClientTestCase(unittest.TestCase):
   def test_channels(self):
     client = APIClient()
 
-    # Might be 0 channels
-    self.assertGreaterEqual(len(client.channels()), 0)
+    self.assertGreaterEqual(len(client.channels()), 1)
 
   def test_faqs(self):
     client = APIClient()
@@ -48,19 +47,6 @@ class APIClientTestCase(unittest.TestCase):
     client = APIClient()
     self.assertGreaterEqual(len(client.posters()), 1)
 
-  def test_rfid_none(self):
-    client = APIClient()
-    
-    # 1 is an invalid RFID so this should
-    # be a result of None
-    self.assertEqual(client.rfid(1), None)
-
-  def test_magnetic_none(self):
-    client = APIClient()
-
-    # 1 is an invalid Magnetic ID so
-    # this should return a result of None
-    self.assertEqual(client.magnetic(1), None)
 
 if __name__ == '__main__':
   unittest.main()

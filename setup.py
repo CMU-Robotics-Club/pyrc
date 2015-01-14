@@ -3,12 +3,14 @@
 import os
 from setuptools import setup
 
+from rc import __client__, __version__
+
 def read(fname):
     return open(os.path.join(os.path.dirname(__file__), fname)).read()
 
 setup(
-    name = "pyroboclub",
-    version = "0.1",
+    name = __client__,
+    version = __version__,
     author = "Brent Strysko",
     author_email = "bstrysko@andrew.cmu.edu",
     description = ("CMU Robotics Club API"),

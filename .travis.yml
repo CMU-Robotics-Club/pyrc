@@ -1,0 +1,11 @@
+language: python
+
+python:
+  - "3.4"
+
+install:
+ - ./setup.py install
+
+script:
+  - cd tests
+  - ./test_api_client.py
