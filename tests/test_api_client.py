@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import unittest
-from rc import APIClient
+from rc.clients import APIClient
 
 class APIClientTestCase(unittest.TestCase):
   """Tests for APIClient."""

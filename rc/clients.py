@@ -1,10 +1,16 @@
 import logging
-import requests
 import json
 import os
-import dateutil.parser
 import collections
-import pkg_resources
+
+import requests
+import dateutil.parser
+
+from . import __client__, __version__
+
+
+__all__ = ['APIClient', ]
+
 
 class APIClient(object):
   """
@@ -65,7 +71,7 @@ class APIClient(object):
     Sets the fields provided of the specified APIRequest.
     """
 
-    return self._put_request("api_requests/{}/".format(id), **kwargs)
+    return self._put_request("api_requests/{}/".format(id), kwargs)
 
   def calendar(self):
     """

@@ -4,7 +4,7 @@ import argparse
 import getpass
 import logging
 
-from rc import APIClient
+from rc.clients import APIClient
 
 if __name__ == "__main__":
   parser = argparse.ArgumentParser()
@@ -160,7 +160,16 @@ if __name__ == "__main__":
       id = args.id
       success = args.success
       meta = args.meta
-      data = client.api_request_write(id, **{'meta': meta, 'success': success})
+
+      body = {}
+
+      if success:
+        body['success'] = success
+
+      if meta:
+        body['meta'] = meta
+
+      data = client.api_request_write(id, **body)
 
   elif action == 'channels':
     method = args.method
