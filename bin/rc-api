@@ -202,17 +202,29 @@ if __name__ == "__main__":
       id = args.id
       amount = args.value
       meta = args.meta
+
+      if not meta:
+        meta = ""
+
       data = client.user_balance(id, amount, meta)
     elif method == 'email':
       id = args.id
       subject = args.subject
       content = args.content
       meta = args.meta
+
+      if not meta:
+        meta = ""
+
       data = client.user_email(id, subject, content, meta)
     elif method == 'rfid':
       id = args.id
       rfid = args.rfid
       meta = args.meta
+
+      if not meta:
+        meta = ""
+
       data = client.user_rfid(id, rfid, meta)
 
   elif action == 'calendar':
@@ -222,10 +234,18 @@ if __name__ == "__main__":
   elif action == 'magnetic':
     _id = args.id
     meta = args.meta
+
+    if not meta:
+      meta = ""
+
     data = client.magnetic(_id, meta)
   elif action == 'rfid':
     _id = args.id
     meta = args.meta
+
+    if not meta:
+      meta = ""
+
     data = client.rfid(_id, meta)
   else:
     logger.info("action {} might have parameters".format(action))
