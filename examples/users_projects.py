@@ -1,6 +1,6 @@
 #!/usr/bin/env python3.4
 
-from rc import APIClient
+from rc.clients import APIClient
 import sys
 
 if __name__ == '__main__':
@@ -9,13 +9,12 @@ if __name__ == '__main__':
   # values into this constructor
   client = APIClient()
 
-  username = input("username: ")
+  username = input("Username: ")
 
   users = client.users(username=username)
   
   if len(users) == 0:
     print("Invalid username")
-    sys.exit(1)
   else:
     user = users[0]
     
