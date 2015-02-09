@@ -4,7 +4,6 @@ import os
 import collections
 
 import requests
-import dateutil.parser
 
 from . import __client__, __version__
 
@@ -104,15 +103,16 @@ class APIClient(object):
 
     return self._put_request("channels/{}/".format(id), {'value': value})
 
-  def datetime(self):
+  def datetime(self, **kwargs):
     """
-    Returns the current datetime object.
+    Returns the a String of the current datetime object.
+    Can pass strftime 'form' query parameter to set format.
     NOTE: useful for systems without RTC
     or no WIFI/Ethernet connection.
     """
 
-    response = self._api_get_request("datetime")
-    return dateutil.parser.parse(response)
+    response = self._api_query_get_request("datetime", **kwargs)
+    return response['datetime']
 
   def faqs(self, **kwargs):
     """

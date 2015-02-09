@@ -108,6 +108,7 @@ if __name__ == "__main__":
 
   # Datetime
   datetime_parser = actions_parser.add_parser('datetime', help="Current Datetime")
+  datetime_parser.add_argument('-form', help="Optional strftime formatting string")
 
   # Magnetic
   magnetic_parser = actions_parser.add_parser('magnetic', help="Magnetic Stripe based User lookup")
@@ -230,7 +231,12 @@ if __name__ == "__main__":
   elif action == 'calendar':
     data = client.calendar()
   elif action == 'datetime':
-    data = client.datetime()
+    form = args.form
+
+    if not form:
+      form = ""
+
+    data = client.datetime(form=form)
   elif action == 'magnetic':
     _id = args.id
     meta = args.meta
