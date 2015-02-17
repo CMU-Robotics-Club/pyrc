@@ -4,11 +4,12 @@ import os
 import collections
 
 import requests
+from ws4py.client.threadedclient import WebSocketClient
 
 from . import __client__, __version__
 
 
-__all__ = ['APIClient', ]
+__all__ = ['APIClient', 'ChannelWebSocketClient', ]
 
 
 class APIClient(object):
@@ -399,3 +400,34 @@ class APIClient(object):
   def _check_response(self, response):
     if response.status_code != requests.codes.ok:
       raise requests.exceptions.HTTPError(response.json(), response=response)
+
+
+
+class ChannelWebSocketClient(WebSocketClient):
+
+  def __init__(self, channel_id, callback, public_key=None, private_key=None, base_url=None, *args, **kwargs):
+    """
+    WebSocketClient that calls the provided callback
+    whenever the Channel object is saved.
+    """
+
+    if not base_url:
+      base_url = "ws://roboticsclub.org:1984"
+
+    url = "{}/channels/{}/".format(base_url, channel_id)
+
+    if not public_key:
+      public_key = os.environ.get('RC_PUBLIC_KEY')
+
+    if not private_key:
+      private_key = os.environ.get('RC_PRIVATE_KEY')
+
+    headers = [
+      ('PUBLIC_KEY', public_key),
+      ('PRIVATE_KEY', private_key),
+      ('API_CLIENT', '{} v{}'.format(__client__, __version__)),
+    ]
+
+    super().__init__(url, headers=headers, *args, **kwargs)
+
+    self.received_message = callback
