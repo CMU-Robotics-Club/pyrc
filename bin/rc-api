@@ -51,6 +51,7 @@ if __name__ == "__main__":
   create_model_parser('sponsors', "Roboclub Sponsors")
   create_model_parser('tshirts', "Roboclub TShirts")
   create_model_parser('webcams', "Roboclub Webcams")
+  create_model_parser('upcs', "Roboclub UPC Items")
 
   # APIRequests
   api_requests_parser = actions_parser.add_parser('api_requests', help="Roboclub APIRequests")
@@ -280,6 +281,8 @@ if __name__ == "__main__":
       data = client.tshirts(**query_params)
     elif action == 'webcams':
       data = client.webcams(**query_params)
+    elif action == 'upcs':
+      data = client.upcs(**query_params)
 
   logger.debug("resulting data is {}".format(data))
 
