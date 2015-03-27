@@ -42,6 +42,9 @@ class APIClient(object):
 
     self._session = requests.Session()
     self._session.headers.update({
+      "PUBLIC-KEY": public_key,
+      "PRIVATE-KEY": private_key,
+      "API-CLIENT": "{} v{}".format(__client__, __version__),
       "PUBLIC_KEY": public_key,
       "PRIVATE_KEY": private_key,
       "API_CLIENT": "{} v{}".format(__client__, __version__),
@@ -289,8 +292,8 @@ class APIClient(object):
 
     self._logger.debug("balance of {} ${}".format(user_id, amount))
 
-    return self._post_request("users/{}/balance/".format(user_id), {
-      'amount': content,
+    return self._post_request("users/{}/balance".format(user_id), {
+      'amount': amount,
       'meta': meta,
     })
 
@@ -437,6 +440,9 @@ class ChannelWebSocketClient(WebSocketClient):
       private_key = os.environ.get('RC_PRIVATE_KEY')
 
     headers = [
+      ('PUBLIC-KEY', public_key),
+      ('PRIVATE-KEY', private_key),
+      ('API-CLIENT', '{} v{}'.format(__client__, __version__)),
       ('PUBLIC_KEY', public_key),
       ('PRIVATE_KEY', private_key),
       ('API_CLIENT', '{} v{}'.format(__client__, __version__)),
@@ -468,6 +474,9 @@ class APIRequestsWebSocketClient(WebSocketClient):
       private_key = os.environ.get('RC_PRIVATE_KEY')
 
     headers = [
+      ('PUBLIC-KEY', public_key),
+      ('PRIVATE-KEY', private_key),
+      ('API-CLIENT', '{} v{}'.format(__client__, __version__)),
       ('PUBLIC_KEY', public_key),
       ('PRIVATE_KEY', private_key),
       ('API_CLIENT', '{} v{}'.format(__client__, __version__)),
