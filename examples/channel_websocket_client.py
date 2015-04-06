@@ -1,15 +1,17 @@
 #!/usr/bin/env python3
 
-from rc.clients import ChannelWebSocketClient
+from rc.clients import WebSocketClient
 import time
 
-CHANNEL_ID = 1
+MODEL = 'channels'
+# Can be None to listen to changes on all Channels
+MODEL_ID = 1
 
-def callback(value):
-  print("New Channel Value: {}".format(value))
+def callback(instance):
+  print("New Channel Value: {}".format(instance['value']))
 
 if __name__ == '__main__':
-  client = ChannelWebSocketClient(CHANNEL_ID, callback)
+  client = WebSocketClient(MODEL, MODEL_ID, callback, base_url="ws://127.0.0.1:1984")
   client.connect()
   
   while True:

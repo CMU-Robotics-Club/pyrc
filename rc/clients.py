@@ -9,7 +9,7 @@ from ws4py.client.threadedclient import WebSocketClient
 from . import __client__, __version__
 
 
-__all__ = ['APIClient', 'ChannelWebSocketClient', 'APIRequestsWebSocketClient']
+__all__ = ['APIClient', 'WebSocketClient']
 
 
 class APIClient(object):
@@ -420,9 +420,9 @@ class APIClient(object):
 
 
 
-class ChannelWebSocketClient(WebSocketClient):
+class WebSocketClient(WebSocketClient):
 
-  def __init__(self, channel_id, callback, public_key=None, private_key=None, base_url=None, *args, **kwargs):
+  def __init__(self, model, model_id, callback, public_key=None, private_key=None, base_url=None, *args, **kwargs):
     """
     WebSocketClient that calls the provided callback
     whenever the Channel object is saved.
@@ -431,7 +431,14 @@ class ChannelWebSocketClient(WebSocketClient):
     if not base_url:
       base_url = "ws://roboticsclub.org:1984"
 
-    url = "{}/channels/{}/".format(base_url, channel_id)
+    url = base_url
+
+    if model:
+      url = "{}/{}".format(url, model)
+
+      if model_id:
+        url = "{}/{}".format(url, model_id)
+
 
     if not public_key:
       public_key = os.environ.get('RC_PUBLIC_KEY')
@@ -450,38 +457,4 @@ class ChannelWebSocketClient(WebSocketClient):
 
     super().__init__(url, headers=headers, *args, **kwargs)
 
-    self.received_message = callback
-
-
-
-class APIRequestsWebSocketClient(WebSocketClient):
-
-  def __init__(self, callback, public_key=None, private_key=None, base_url=None, *args, **kwargs):
-    """
-    WebSocketClient that calls the provided callback
-    whenever an APIRequest object is saved.
-    """
-
-    if not base_url:
-      base_url = "ws://roboticsclub.org:1984"
-
-    url = "{}/api_requests/".format(base_url)
-
-    if not public_key:
-      public_key = os.environ.get('RC_PUBLIC_KEY')
-
-    if not private_key:
-      private_key = os.environ.get('RC_PRIVATE_KEY')
-
-    headers = [
-      ('PUBLIC-KEY', public_key),
-      ('PRIVATE-KEY', private_key),
-      ('API-CLIENT', '{} v{}'.format(__client__, __version__)),
-      ('PUBLIC_KEY', public_key),
-      ('PRIVATE_KEY', private_key),
-      ('API_CLIENT', '{} v{}'.format(__client__, __version__)),
-    ]
-
-    super().__init__(url, headers=headers, *args, **kwargs)
-
-    self.received_message = callback
+    self.received_message = lambda instance: callback(json.loads(str(instance)))
