@@ -455,6 +455,6 @@ class WebSocketClient(WebSocketClient):
       ('API_CLIENT', '{} v{}'.format(__client__, __version__)),
     ]
 
-    super().__init__(url, headers=headers, *args, **kwargs)
+    super(WebSocketClient, self).__init__(url, headers=headers, *args, **kwargs)
 
     self.received_message = lambda instance: callback(json.loads(str(instance)))
