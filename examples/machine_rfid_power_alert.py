@@ -3,10 +3,7 @@
 from rc.clients import WebSocketClient, APIClient
 from threading import Timer
 
-#AUTHORIZED_POWERED_OFF_TIMEOUT = 15*60 # 15 minutes
-AUTHORIZED_POWERED_OFF_TIMEOUT = 5 # 15 minutes
-
-
+AUTHORIZED_POWERED_OFF_TIMEOUT = 5  # 5 seconds
 api = APIClient()
 
 timers = {}
@@ -22,8 +19,8 @@ def forgot_id(tool_name, user_id):
 
   print(m)
 
-#  api.channel_write(5, m) # Clock Channel
-#  api.channel_write(9, m) # Speaker Channel
+  api.channel_write(5, m) # Clock Channel
+  api.channel_write(9, m) # Speaker Channel
 
 
 def callback(machine):
