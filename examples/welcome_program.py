@@ -35,6 +35,7 @@ def callback(value):
 
 
 if __name__ == '__main__':
-    client = WebSocketClient(model='api_requests', model_id=None, callback=callback);
-    client.connect()
-    client.run_forever()
+    while True:
+        client = WebSocketClient(model='api_requests', model_id=None, callback=callback);
+        client.connect()
+        client.run_forever()

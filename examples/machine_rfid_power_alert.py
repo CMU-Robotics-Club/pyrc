@@ -3,7 +3,7 @@
 from rc.clients import WebSocketClient, APIClient
 from threading import Timer
 
-AUTHORIZED_POWERED_OFF_TIMEOUT = 5  # 5 seconds
+AUTHORIZED_POWERED_OFF_TIMEOUT = 15 * 60  # 15 minutes
 api = APIClient()
 
 timers = {}
@@ -29,12 +29,15 @@ def callback(machine):
   user_id = machine['user']
   powered = machine['powered']
 
+  if type == 'Mill':
+    return
+
   if not id in timers:
     timers[id] = Timer(AUTHORIZED_POWERED_OFF_TIMEOUT, forgot_id, args=(type, user_id, ))
 
   print("{} | user: {}, powered: {}".format(type, user_id, powered))
 
-  if powered:
+  if powered or not user_id:
     print("Canceling timeout for {}".format(type))
     timers[id].cancel()
     timers[id] = Timer(AUTHORIZED_POWERED_OFF_TIMEOUT, forgot_id, args=(type, user_id, ))
@@ -46,6 +49,7 @@ def callback(machine):
 
 
 if __name__ == '__main__':
-  client = WebSocketClient('machines', None, callback)
-  client.connect()
-  client.run_forever()
+  while True:
+    client = WebSocketClient('machines', None, callback)
+    client.connect()
+    client.run_forever()
